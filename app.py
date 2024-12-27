@@ -2,14 +2,16 @@ from flask import Flask, redirect, url_for, send_from_directory
 from flask_migrate import Migrate
 from backend.extensions import db
 from flask_cors import CORS
-from backend.routes import api_blueprint
+from backend.routes import api
 from backend.config import Config
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from backend.models import Cliente, Proveedor, Ingeniero, Sucursal, Usuario, Ticket, BitacoraTicket, Facturacion
+from backend.models import Client, Provider, Ingenier, Branch, User, Ticket, History_ticket, Facture
 from dotenv import load_dotenv
 from sqlalchemy import text
+from flask_jwt_extended import JWTManager
 import os
+
 
 # Cargar variables de entorno desde el archivo .env
 load_dotenv()
@@ -35,19 +37,25 @@ def create_app():
     # Habilitar CORS
     CORS(app)
 
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+
+    # Habilitar JWT
+
+    JWTManager(app)
+
     # Registrar las rutas de la API
-    app.register_blueprint(api_blueprint, url_prefix='/api')
+    app.register_blueprint(api, url_prefix='/api')
 
     # Configurar Flask-Admin
     admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
-    admin.add_view(ModelView(Cliente, db.session))
-    admin.add_view(ModelView(Proveedor, db.session))
-    admin.add_view(ModelView(Ingeniero, db.session))
-    admin.add_view(ModelView(Sucursal, db.session))
-    admin.add_view(ModelView(Usuario, db.session))
-    admin.add_view(ModelView(Ticket, db.session))
-    admin.add_view(ModelView(BitacoraTicket, db.session))
-    admin.add_view(ModelView(Facturacion, db.session))
+    admin.add_view(ModelView(Client, db.session, endpoint='clients'))
+    admin.add_view(ModelView(Provider, db.session, endpoint='providers'))
+    admin.add_view(ModelView(Ingenier, db.session, endpoint='ingeniers'))
+    admin.add_view(ModelView(Branch, db.session, endpoint='branches'))
+    admin.add_view(ModelView(User, db.session, endpoint='users'))
+    admin.add_view(ModelView(Ticket, db.session, endpoint='tickets'))
+    admin.add_view(ModelView(History_ticket, db.session, endpoint='history_tickets'))
+    admin.add_view(ModelView(Facture, db.session, endpoint='factures'))
 
     # Ruta principal para servir el frontend
     @app.route('/')
