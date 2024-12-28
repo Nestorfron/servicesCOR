@@ -1,8 +1,28 @@
 from backend.extensions import db
 
-class Cliente(db.Model):
-    """Modelo que representa a los clientes."""
-    __tablename__ = 'clientes'
+
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.BigInteger, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=True)
+    password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=True)
+
+    def __repr__(self):
+        return f'<Usuario {self.name}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'role': self.role
+        }
+    
+class Customer(db.Model):
+    __tablename__ = 'customers'
 
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -12,12 +32,21 @@ class Cliente(db.Model):
     phone_number = db.Column(db.String(20), nullable=True)
 
     def __repr__(self):
-        return f'<Cliente {self.name}>'
+        return f'<Customer {self.name}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'address': self.address,
+            'contact_person': self.contact_person,
+            'email': self.email,
+            'phone_number': self.phone_number
+        }
 
 
-class Proveedor(db.Model):
-    """Modelo que representa a los proveedores."""
-    __tablename__ = 'proveedores'
+class Provider(db.Model):
+    __tablename__ = 'providers'
 
     id = db.Column(db.BigInteger, primary_key=True)
     company_name = db.Column(db.String(255), nullable=False)
@@ -28,63 +57,102 @@ class Proveedor(db.Model):
     zone = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
-        return f'<Proveedor {self.company_name}>'
+        return f'<Provider {self.company_name}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'company_name': self.company_name,
+            'contact_person': self.contact_person,
+            'email': self.email,
+            'phone_number': self.phone_number,
+            'state': self.state,
+            'zone': self.zone
+        }
 
 
-class Ingeniero(db.Model):
-    """Modelo que representa a los ingenieros asociados a proveedores."""
-    __tablename__ = 'ingenieros'
+class Engineer(db.Model):
+    __tablename__ = 'engineers'
 
     id = db.Column(db.BigInteger, primary_key=True)
-    provider_id = db.Column(db.BigInteger, db.ForeignKey('proveedores.id'), nullable=False, index=True)
+
+
+    provider_id = db.Column(db.BigInteger, db.ForeignKey('providers.id'), nullable=False, index=True)
+
+
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=True)
     phone_number = db.Column(db.String(20), nullable=True)
 
-    provider = db.relationship('Proveedor', backref=db.backref('ingenieros', lazy='dynamic'))
+    provider = db.relationship('Provider', backref=db.backref('engineers', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Ingeniero {self.name}>'
+        return f'<Engineer {self.name}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'provider_id': self.provider_id,
+            'name': self.name,
+            'email': self.email,
+            'phone_number': self.phone_number
+        }
 
 
-class Sucursal(db.Model):
-    """Modelo que representa las sucursales asociadas a clientes."""
-    __tablename__ = 'sucursales'
+class Branch(db.Model):
+    __tablename__ = 'branches'
 
     id = db.Column(db.BigInteger, primary_key=True)
-    client_id = db.Column(db.BigInteger, db.ForeignKey('clientes.id'), nullable=False, index=True)
+    customer_id = db.Column(db.BigInteger, db.ForeignKey('customers.id'), nullable=False, index=True)
+
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.Text, nullable=True)
 
-    client = db.relationship('Cliente', backref=db.backref('sucursales', lazy='dynamic'))
+    customer = db.relationship('Customer', backref=db.backref('branches', lazy='dynamic'))
 
     def __repr__(self):
         return f'<Sucursal {self.name}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'customer_id': self.customer_id,
+            'name': self.name,
+            'address': self.address
+        }
 
-
-class Usuario(db.Model):
-    """Modelo que representa a los usuarios del sistema."""
-    __tablename__ = 'usuarios'
-
-    id = db.Column(db.BigInteger, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=True)
-    role = db.Column(db.String(50), nullable=True)
-
-    def __repr__(self):
-        return f'<Usuario {self.name}>'
 
 
 class Ticket(db.Model):
-    """Modelo que representa los tickets de servicio."""
     __tablename__ = 'tickets'
 
     id = db.Column(db.BigInteger, primary_key=True)
-    client_id = db.Column(db.BigInteger, db.ForeignKey('clientes.id'), nullable=False, index=True)
-    provider_id = db.Column(db.BigInteger, db.ForeignKey('proveedores.id'), nullable=False, index=True)
-    engineer_id = db.Column(db.BigInteger, db.ForeignKey('ingenieros.id'), nullable=False, index=True)
-    branch_id = db.Column(db.BigInteger, db.ForeignKey('sucursales.id'), nullable=False, index=True)
-    activity = db.Column(db.Text, nullable=True)
+
+
+    customer_id = db.Column(db.BigInteger, db.ForeignKey('customers.id'), nullable=False, index=True)
+
+
+    provider_id = db.Column(db.BigInteger, db.ForeignKey('providers.id'), nullable=False, index=True)
+    engineer_id = db.Column(db.BigInteger, db.ForeignKey('engineers.id'), nullable=False, index=True)
+    branch_id = db.Column(db.BigInteger, db.ForeignKey('branches.id'), nullable=False, index=True)
+
+
+    folio = db.Column(db.BigInteger, nullable=True)
+    folio_TIB = db.Column(db.BigInteger, nullable=True)
+    Social_Registration = db.Column(db.BigInteger, nullable=True)
+    address = db.Column(db.Text, nullable=True)
+    colony = db.Column(db.String(100), nullable=True)
+    postal_code = db.Column(db.String(100), nullable=True)
+    city = db.Column(db.String(100), nullable=True)
+    municipality = db.Column(db.String(100), nullable=True)
+    state = db.Column(db.String(100), nullable=True)
+    contact_1 = db.Column(db.String(100), nullable=True)
+    phone_1 = db.Column(db.String(100), nullable=True)
+    contact_2 = db.Column(db.String(100), nullable=True)
+    phone_2 = db.Column(db.String(100), nullable=True)
+    email = db.Column(db.String(100), nullable=True)
+    service = db.Column(db.String(100), nullable=True)
+
     status = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
@@ -93,44 +161,86 @@ class Ticket(db.Model):
     billing_status = db.Column(db.String(20), nullable=False)
     payment_status = db.Column(db.String(20), nullable=False)
 
-    client = db.relationship('Cliente', backref=db.backref('tickets', lazy='dynamic'))
-    provider = db.relationship('Proveedor', backref=db.backref('tickets', lazy='dynamic'))
-    engineer = db.relationship('Ingeniero', backref=db.backref('tickets', lazy='dynamic'))
-    branch = db.relationship('Sucursal', backref=db.backref('tickets', lazy='dynamic'))
+
+    customer = db.relationship('Customer', backref=db.backref('tickets', lazy='dynamic'))
+    provider = db.relationship('Provider', backref=db.backref('tickets', lazy='dynamic'))
+    engineer = db.relationship('Engineer', backref=db.backref('tickets', lazy='dynamic'))
+    branch = db.relationship('Branch', backref=db.backref('tickets', lazy='dynamic'))
+
 
     def __repr__(self):
         return f'<Ticket {self.id}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'folio': self.folio,
+            'folio_TIB': self.folio_TIB,
+            'Social_Registration': self.Social_Registration,
+            'address': self.address,
+            'colony': self.colony,
+            'postal_code': self.postal_code,
+            'city': self.city,
+            'municipality': self.municipality,
+            'state': self.state,
+            'contact_1': self.contact_1,
+            'phone_1': self.phone_1,
+            'contact_2': self.contact_2,
+            'phone_2': self.phone_2,
+            'email': self.email,
+            'service': self.service,
+        }
 
 
-class BitacoraTicket(db.Model):
-    """Modelo que representa la bitácora de tickets."""
-    __tablename__ = 'bitacora_tickets'
+class History_ticket(db.Model):
+    __tablename__ = 'history_tickets'
 
     id = db.Column(db.BigInteger, primary_key=True)
     ticket_id = db.Column(db.BigInteger, db.ForeignKey('tickets.id'), nullable=False, index=True)
-    user_id = db.Column(db.BigInteger, db.ForeignKey('usuarios.id'), nullable=False, index=True)
+    user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'), nullable=False, index=True)
     comment = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
 
-    ticket = db.relationship('Ticket', backref=db.backref('bitacoras', lazy='dynamic'))
-    user = db.relationship('Usuario', backref=db.backref('bitacoras', lazy='dynamic'))
+    ticket = db.relationship('Ticket', backref=db.backref('history_tickets', lazy='dynamic'))
+    user = db.relationship('User', backref=db.backref('history_tickets', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<BitacoraTicket {self.id}>'
+        return f'<History_ticket {self.id}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'ticket_id': self.ticket_id,
+            'user_id': self.user_id,
+            'comment': self.comment,
+            'created_at': self.created_at
+        }
 
 
-class Facturacion(db.Model):
-    """Modelo que representa la facturación asociada a tickets."""
-    __tablename__ = 'facturacion'
+class Invoice(db.Model):
+    __tablename__ = 'invoices'
 
     id = db.Column(db.BigInteger, primary_key=True)
+
     ticket_id = db.Column(db.BigInteger, db.ForeignKey('tickets.id'), nullable=False, index=True)
+
+
     amount = db.Column(db.Numeric, nullable=False)
     status = db.Column(db.String(20), nullable=False)
     invoice_date = db.Column(db.Date, nullable=True)
     payment_date = db.Column(db.Date, nullable=True)
 
-    ticket = db.relationship('Ticket', backref=db.backref('facturaciones', lazy='dynamic'))
+    ticket = db.relationship('Ticket', backref=db.backref('invoices', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Facturacion {self.id}>'
+        return f'<Invoice {self.id}>'
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'ticket_id': self.ticket_id,
+            'amount': self.amount,
+            'status': self.status,
+            'invoice_date': self.invoice_date,
+            'payment_date': self.payment_date
+        }

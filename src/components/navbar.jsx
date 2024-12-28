@@ -1,8 +1,10 @@
 import React from "react";
 import {Navbar as Navbarui, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
+import { useTheme } from "next-themes";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const {theme, setTheme}= useTheme();
 
   const menuItems = [
     "Profile",
@@ -44,6 +46,17 @@ export default function Navbar() {
           <Link color="foreground" to="#">
             Integrations
           </Link>
+        </NavbarItem>
+        <NavbarItem>
+        <div>
+      
+        <Button color="primary" onClick={() => setTheme("light")}>
+          Light Mode
+        </Button>
+        <Button color="primary" onClick={() => setTheme("dark")}>
+          Dark Mode
+        </Button>
+      </div>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
