@@ -21,8 +21,8 @@ class User(db.Model):
             'role': self.role
         }
     
-class Client(db.Model):
-    __tablename__ = 'clients'
+class Customer(db.Model):
+    __tablename__ = 'customers'
 
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -32,7 +32,7 @@ class Client(db.Model):
     phone_number = db.Column(db.String(20), nullable=True)
 
     def __repr__(self):
-        return f'<Client {self.name}>'
+        return f'<Customer {self.name}>'
     
     def serialize(self):
         return {
@@ -71,8 +71,8 @@ class Provider(db.Model):
         }
 
 
-class Ingenier(db.Model):
-    __tablename__ = 'ingeniers'
+class Engineer(db.Model):
+    __tablename__ = 'engineers'
 
     id = db.Column(db.BigInteger, primary_key=True)
 
@@ -84,10 +84,10 @@ class Ingenier(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=True)
     phone_number = db.Column(db.String(20), nullable=True)
 
-    provider = db.relationship('Provider', backref=db.backref('ingeniers', lazy='dynamic'))
+    provider = db.relationship('Provider', backref=db.backref('engineers', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Ingeniero {self.name}>'
+        return f'<Engineer {self.name}>'
     
     def serialize(self):
         return {
@@ -103,12 +103,12 @@ class Branch(db.Model):
     __tablename__ = 'branches'
 
     id = db.Column(db.BigInteger, primary_key=True)
-    client_id = db.Column(db.BigInteger, db.ForeignKey('clients.id'), nullable=False, index=True)
+    customer_id = db.Column(db.BigInteger, db.ForeignKey('customers.id'), nullable=False, index=True)
 
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.Text, nullable=True)
 
-    client = db.relationship('Client', backref=db.backref('branches', lazy='dynamic'))
+    customer = db.relationship('Customer', backref=db.backref('branches', lazy='dynamic'))
 
     def __repr__(self):
         return f'<Sucursal {self.name}>'
@@ -116,7 +116,7 @@ class Branch(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'client_id': self.client_id,
+            'customer_id': self.customer_id,
             'name': self.name,
             'address': self.address
         }
@@ -129,11 +129,11 @@ class Ticket(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
 
 
-    client_id = db.Column(db.BigInteger, db.ForeignKey('clients.id'), nullable=False, index=True)
+    customer_id = db.Column(db.BigInteger, db.ForeignKey('customers.id'), nullable=False, index=True)
 
 
     provider_id = db.Column(db.BigInteger, db.ForeignKey('providers.id'), nullable=False, index=True)
-    engineer_id = db.Column(db.BigInteger, db.ForeignKey('ingeniers.id'), nullable=False, index=True)
+    engineer_id = db.Column(db.BigInteger, db.ForeignKey('engineers.id'), nullable=False, index=True)
     branch_id = db.Column(db.BigInteger, db.ForeignKey('branches.id'), nullable=False, index=True)
 
 
@@ -162,9 +162,9 @@ class Ticket(db.Model):
     payment_status = db.Column(db.String(20), nullable=False)
 
 
-    client = db.relationship('Client', backref=db.backref('tickets', lazy='dynamic'))
+    customer = db.relationship('Customer', backref=db.backref('tickets', lazy='dynamic'))
     provider = db.relationship('Provider', backref=db.backref('tickets', lazy='dynamic'))
-    engineer = db.relationship('Ingenier', backref=db.backref('tickets', lazy='dynamic'))
+    engineer = db.relationship('Engineer', backref=db.backref('tickets', lazy='dynamic'))
     branch = db.relationship('Branch', backref=db.backref('tickets', lazy='dynamic'))
 
 
@@ -217,8 +217,8 @@ class History_ticket(db.Model):
         }
 
 
-class Facture(db.Model):
-    __tablename__ = 'factures'
+class Invoice(db.Model):
+    __tablename__ = 'invoices'
 
     id = db.Column(db.BigInteger, primary_key=True)
 
@@ -230,10 +230,10 @@ class Facture(db.Model):
     invoice_date = db.Column(db.Date, nullable=True)
     payment_date = db.Column(db.Date, nullable=True)
 
-    ticket = db.relationship('Ticket', backref=db.backref('factures', lazy='dynamic'))
+    ticket = db.relationship('Ticket', backref=db.backref('invoices', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Facture {self.id}>'
+        return f'<Invoice {self.id}>'
     
     def serialize(self):
         return {

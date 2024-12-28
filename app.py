@@ -6,7 +6,7 @@ from backend.routes import api
 from backend.config import Config
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from backend.models import Client, Provider, Ingenier, Branch, User, Ticket, History_ticket, Facture
+from backend.models import Customer, Provider, Engineer, Branch, User, Ticket, History_ticket, Invoice
 from dotenv import load_dotenv
 from sqlalchemy import text
 from flask_jwt_extended import JWTManager
@@ -48,14 +48,14 @@ def create_app():
 
     # Configurar Flask-Admin
     admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
-    admin.add_view(ModelView(Client, db.session, endpoint='clients'))
+    admin.add_view(ModelView(Customer, db.session, endpoint='customers'))
     admin.add_view(ModelView(Provider, db.session, endpoint='providers'))
-    admin.add_view(ModelView(Ingenier, db.session, endpoint='ingeniers'))
+    admin.add_view(ModelView(Engineer, db.session, endpoint='engineers'))
     admin.add_view(ModelView(Branch, db.session, endpoint='branches'))
     admin.add_view(ModelView(User, db.session, endpoint='users'))
     admin.add_view(ModelView(Ticket, db.session, endpoint='tickets'))
     admin.add_view(ModelView(History_ticket, db.session, endpoint='history_tickets'))
-    admin.add_view(ModelView(Facture, db.session, endpoint='factures'))
+    admin.add_view(ModelView(Invoice, db.session, endpoint='ivoices'))
 
     # Ruta principal para servir el frontend
     @app.route('/')
