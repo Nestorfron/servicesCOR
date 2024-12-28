@@ -1,19 +1,12 @@
-import { user } from "@nextui-org/react";
-
-console.log(user);
 
 const getState = ({ getStore, getActions, setStore }) => {
-  console.log(getStore, getActions);
 
-  // import.meta.env.VITE_API_URL;
 
   return {
     store: {
-      saludo: "Hola",
-      items: [],
       users: null,
       user: null,
-      clients: [],
+      customers: [],
       providers: [],
       engineers: [],
       branches: [],
@@ -22,59 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       invoices: [],
     },
     actions: {
-      createItem: async (item) => {
-        try {
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/items`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(item),
-            }
-          );
-          if (!response.ok) {
-            return false;
-          }
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.log(error);
-        }
-      },
-      getItems: async () => {
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/items`);
-          const data = await response.json();
-          if (response.ok) {
-            setStore({ items: data });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      },
-      deleteItem: async (item_id) => {
-        try {
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/items/${item_id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (!response.ok) {
-            return false;
-          }
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.log(error);
-        }
-      },
-
+  
       //AUTHETICATION ACTIONS://
 
       signup: async (userData) => {
@@ -102,6 +43,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           throw error;
         }
       },
+
       login: async (credentials) => {
         try {
           const response = await fetch(
@@ -150,10 +92,10 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.error("Fetch users error:", error);
         }
       },
-      fetchClients: async () => {
+      fetchCustomers: async () => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/clients`,
+            `${import.meta.env.VITE_API_URL}/customers`,
             {
               method: "GET",
               headers: {
@@ -164,12 +106,12 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`Failed to fetch clients: ${errorData.message}`);
+            throw new Error(`Failed to fetch customers: ${errorData.message}`);
           }
           const data = await response.json();
-          setStore({ clients: data });
+          setStore({ customers: data });
         } catch (error) {
-          console.error("Fetch clients error:", error);
+          console.error("Fetch customers error:", error);
         }
       },
       fetchProviders: async () => {
@@ -311,28 +253,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       //POST ACTIONS://
 
-      createClient: async (clientData) => {
+      createCustomer: async (customerData) => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/new_client`,
+            `${import.meta.env.VITE_API_URL}/new_customer`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(clientData),
+              body: JSON.stringify(customerData),
             }
           );
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`Failed to create client: ${errorData.message}`);
+            throw new Error(`Failed to create customer: ${errorData.message}`);
           }
-          const newClient = await response.json();
-          setStore((state) => ({ clients: [...state.clients, newClient] }));
-          return newClient;
+          const newCustomer = await response.json();
+          setStore((state) => ({ customers: [...state.customers, newCustomer] }));
+          return newCustomer;
         } catch (error) {
-          console.error("Create client error:", error);
+          console.error("Create customer error:", error);
           throw error;
         }
       },
@@ -529,32 +471,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       //EDIT ACTIONS://
 
-      updateClient: async (id, clientData) => {
+      updateCustomer: async (id, customerData) => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/clients/${id}`,
+            `${import.meta.env.VITE_API_URL}/customers/${id}`,
             {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(clientData),
+              body: JSON.stringify(customerData),
             }
           );
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`Failed to update client: ${errorData.message}`);
+            throw new Error(`Failed to update customer: ${errorData.message}`);
           }
-          const updatedClient = await response.json();
+          const updatedCustomer = await response.json();
           setStore((state) => ({
-            clients: state.clients.map((client) =>
-              client.id === id ? updatedClient : client
+            customers: state.customers.map((customer) =>
+              customer.id === id ? updatedCustomer : customer
             ),
           }));
-          return updatedClient;
+          return updatedCustomer;
         } catch (error) {
-          console.error("Update client error:", error);
+          console.error("Update customer error:", error);
           throw error;
         }
       },
@@ -773,10 +715,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       //DELETE ACTIONS://
 
-      deleteClient: async (id) => {
+      deleteCustomer: async (id) => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/clients/${id}`,
+            `${import.meta.env.VITE_API_URL}/customers/${id}`,
             {
               method: "DELETE",
               headers: {
@@ -787,13 +729,13 @@ const getState = ({ getStore, getActions, setStore }) => {
           );
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`Failed to delete client: ${errorData.message}`);
+            throw new Error(`Failed to delete customer: ${errorData.message}`);
           }
           setStore((state) => ({
-            clients: state.clients.filter((client) => client.id !== id),
+            customers: state.customers.filter((customer) => customer.id !== id),
           }));
         } catch (error) {
-          console.error("Delete client error:", error);
+          console.error("Delete customer error:", error);
           throw error;
         }
       },
