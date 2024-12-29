@@ -16,26 +16,29 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import Logo from "../assets/logoBlanco.svg";
 import { AbstractShapes } from "../components/abstract.jsx";
 import { ParticlesBackground } from "../components/particles.jsx";
+import { use } from "react";
 
 function Home() {
-  const [selected, setSelected] = useState("login");
+  const {store, actions } = useContext(Context);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { theme, setTheme } = useTheme();
-  const { setUser } = useContext(Context);
 
   useEffect(() => {
-    if (userName && password) {
-      setUser({ name: userName, password: password });
-    }
-  }, [userName, password]);
+    
+  },[]);
 
   const handleSubmitLogin = (e) => {
     e.preventDefault();
-    setUser({ name: userName, password: password });
-    navigate("/dashboard");
+    setIsLoading(true);
+    actions.login(userName, password).then((res) => {
+      setIsLoading(false);
+      if (res) {
+        navigate("/dashboard");
+      }
+    });
   };
 
   return (
@@ -82,6 +85,9 @@ function Home() {
                 <Input
                   id="email"
                   type="email"
+                  name="email"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                   placeholder="nombre@empresa.com"
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 transition-all duration-300"
                   required
@@ -96,7 +102,10 @@ function Home() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="••••••••"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="************"
                     className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:bg-white/20 transition-all duration-300 pr-10"
                     required
                   />
@@ -104,7 +113,7 @@ function Home() {
                     type="button"
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
                   >
-                    {"ppassword" ? (
+                    {password ? (
                       <EyeOff className="h-4 w-4" />
                     ) : (
                       <Eye className="h-4 w-4" />
@@ -114,10 +123,11 @@ function Home() {
               </div>
 
               <Button
+                onClick={handleSubmitLogin}
                 type="submit"
                 className="w-full bg-white text-[#034AA6] hover:bg-white/90 transition-all duration-300 font-medium rounded-lg py-2.5"
               >
-                {"isLoading" ? (
+                {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   "Iniciar Sesión"

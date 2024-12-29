@@ -14,6 +14,7 @@ import os
 
 
 # Cargar variables de entorno desde el archivo .env
+
 load_dotenv()
 
 def create_app():
@@ -47,6 +48,8 @@ def create_app():
     app.register_blueprint(api, url_prefix='/api')
 
     # Configurar Flask-Admin
+    app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')
+    app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
     admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
     admin.add_view(ModelView(Customer, db.session, endpoint='customers'))
     admin.add_view(ModelView(Provider, db.session, endpoint='providers'))
