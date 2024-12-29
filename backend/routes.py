@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_from_directory
+from flask import Blueprint, jsonify, request
 from backend.models import Customer, Provider, Engineer, Branch, User, Ticket, History_ticket, Invoice
 from backend.extensions import db
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
@@ -11,6 +11,25 @@ api = Blueprint('api', __name__)
 
 
 """ENDPOINTS REGISTER AND LOGIN"""
+
+@api.route('/master_signup', methods=['POST'])
+def master_signup():
+    body = request.get_json()
+    name = body.get('name')
+    email = body.get('email')
+    password = body.get('password')
+    if name is None or email is None or password is None:
+        return jsonify({'message': 'Missing parameters'}), 400
+    
+    password_hash = generate_password_hash(password)
+
+    try:
+        user = User(name=name, email=email, password=password_hash, role='master')
+        db.session.add(user)
+        db.session.commit()
+        return jsonify(user.serialize())
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
 
 
 @api.route('/signup', methods=['POST'])
@@ -43,8 +62,8 @@ def signup():
 @api.route('/login', methods=['POST'])
 def login():
     body = request.get_json()
-    email = body.get('email')
-    password = body.get('password')
+    email = body.get('email', None)
+    password = body.get('password', None)
     if email is None or password is None:
         return jsonify({'message': 'Missing parameters'}), 400
     user = User.query.filter_by(email=email).first()    

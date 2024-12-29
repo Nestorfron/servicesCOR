@@ -28,7 +28,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(userData),
+              body: JSON.stringify({userData}),
             }
           );
           if (!response.ok) {
@@ -44,7 +44,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      login: async (credentials) => {
+      login: async (email, password) => {
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/login`,
@@ -53,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(credentials),
+              body: JSON.stringify({email, password}),
             }
           );
           if (!response.ok) {
@@ -263,7 +263,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(customerData),
+              body: JSON.stringify({customerData}),
             }
           );
           if (!response.ok) {
@@ -289,7 +289,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(providerData),
+              body: JSON.stringify({providerData}),
             }
           );
           if (!response.ok) {
@@ -317,7 +317,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(engineerData),
+              body: JSON.stringify({engineerData}),
             }
           );
           if (!response.ok) {
@@ -345,7 +345,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(branchData),
+              body: JSON.stringify({branchData}),
             }
           );
           if (!response.ok) {
@@ -371,7 +371,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(userData),
+              body: JSON.stringify({userData}),
             }
           );
           if (!response.ok) {
@@ -397,7 +397,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(ticketData),
+              body: JSON.stringify({ticketData}),
             }
           );
           if (!response.ok) {
@@ -423,7 +423,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(ticketHistoryData),
+              body: JSON.stringify({ticketHistoryData}),
             }
           );
           if (!response.ok) {
@@ -453,7 +453,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(invoiceData),
+              body: JSON.stringify({invoiceData}),
             }
           );
           if (!response.ok) {
@@ -481,7 +481,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(customerData),
+              body: JSON.stringify({customerData}),
             }
           );
           if (!response.ok) {
@@ -511,7 +511,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(providerData),
+              body: JSON.stringify({providerData}),
             }
           );
           if (!response.ok) {
@@ -541,7 +541,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(engineerData),
+              body: JSON.stringify({engineerData}),
             }
           );
           if (!response.ok) {
@@ -571,7 +571,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(branchData),
+              body: JSON.stringify({branchData}),
             }
           );
           if (!response.ok) {
@@ -601,7 +601,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(userData),
+              body: JSON.stringify({userData}),
             }
           );
           if (!response.ok) {
@@ -631,7 +631,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(ticketData),
+              body: JSON.stringify({ticketData}),
             }
           );
           if (!response.ok) {
@@ -661,7 +661,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(ticketHistoryData),
+              body: JSON.stringify({ticketHistoryData}),
             }
           );
           if (!response.ok) {
@@ -693,7 +693,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify(invoiceData),
+              body: JSON.stringify({invoiceData}),
             }
           );
           if (!response.ok) {
