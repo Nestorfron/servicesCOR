@@ -11,7 +11,7 @@ class User(db.Model):
     role = db.Column(db.String(50), nullable=True)
 
     def __repr__(self):
-        return f'<Usuario {self.name}>'
+        return f'<User {self.name}>'
     
     def serialize(self):
         return {
@@ -56,6 +56,8 @@ class Provider(db.Model):
     state = db.Column(db.String(100), nullable=True)
     zone = db.Column(db.String(100), nullable=True)
 
+    engineers = db.relationship('Engineer', backref=db.backref('provider'))
+
     def __repr__(self):
         return f'<Provider {self.company_name}>'
     
@@ -67,7 +69,8 @@ class Provider(db.Model):
             'email': self.email,
             'phone_number': self.phone_number,
             'state': self.state,
-            'zone': self.zone
+            'zone': self.zone,
+            'engineers': [engineer.serialize() for engineer in self.engineers]
         }
 
 
@@ -75,16 +78,12 @@ class Engineer(db.Model):
     __tablename__ = 'engineers'
 
     id = db.Column(db.BigInteger, primary_key=True)
-
-
+    
     provider_id = db.Column(db.BigInteger, db.ForeignKey('providers.id'), nullable=False, index=True)
-
-
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=True)
+    password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
-
-    provider = db.relationship('Provider', backref=db.backref('engineers', lazy='dynamic'))
 
     def __repr__(self):
         return f'<Engineer {self.name}>'
@@ -111,7 +110,7 @@ class Branch(db.Model):
     customer = db.relationship('Customer', backref=db.backref('branches', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Sucursal {self.name}>'
+        return f'<Branch {self.name}>'
     
     def serialize(self):
         return {

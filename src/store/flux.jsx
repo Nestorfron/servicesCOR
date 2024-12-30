@@ -4,8 +4,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
   return {
     store: {
-      users: null,
-      user: null,
+      users: [],
+      user: [],
       customers: [],
       providers: [],
       engineers: [],
@@ -60,8 +60,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error("Login failed:", response.statusText);
           }
           const data = await response.json();
-          localStorage.setItem("token", data.access_token);
-          setStore({ user: data.user });
+          localStorage.setItem("token", data.token);
           return data;
         } catch (error) {
           console.log("Login error:", error);
@@ -71,22 +70,22 @@ const getState = ({ getStore, getActions, setStore }) => {
       //GET ACTIONS://
 
       fetchUsers: async () => {
+        const jwt = localStorage.getItem("token");
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/users`,
             {
               method: "GET",
               headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                authorization: `Bearer ${jwt}`,
               },
-            }
-          );
+            });
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Failed to fetch users: ${errorData.message}`);
           }
           const data = await response.json();
+          console.log("data", data);
           setStore({ users: data });
         } catch (error) {
           console.error("Fetch users error:", error);
