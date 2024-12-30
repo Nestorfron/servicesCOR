@@ -1,5 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useContext } from "react";
+import { Context } from "../store/appContext";
+
 
 export const Dashboard = () => {
-  return <div>Dashboard</div>;
+  const { actions } = useContext(Context);
+
+  useEffect(() => {
+  }, []);
+  
+
+  const users = actions.users;
+
+
+
+
+  return <div></div>;
 };

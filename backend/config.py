@@ -7,8 +7,6 @@ from flask_jwt_extended import JWTManager
 
 load_dotenv()
 
-print(os.getenv('VITE_API_URL'))
-
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
