@@ -1,5 +1,6 @@
 import React from "react";
-import {Navbar as Navbarui, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
+import {Navbar as Navbarui, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Button} from "@nextui-org/react";
+import { Link } from "react-router-dom";
 import { useTheme } from "next-themes";
 
 export default function Navbar() {
@@ -27,24 +28,44 @@ export default function Navbar() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">ServiceCOR</p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" to="#">
-            Features
+        <NavbarItem >
+          <Link  to="/dashboard">
+            Dashboard
           </Link>
         </NavbarItem>
-        <NavbarItem isActive>
-          <Link to="#" aria-current="page">
-            Customers
+        <NavbarItem >
+          <Link to="/tickets" aria-current="page">
+            Nuevo Reporte
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" to="#">
-            Integrations
+        <NavbarItem >
+          <Link to="/customers" aria-current="page">
+            Clientes
+          </Link>
+        </NavbarItem>
+        <NavbarItem >
+          <Link to="/providers" aria-current="page">
+            Proveedores
+          </Link>
+        </NavbarItem>
+        <NavbarItem >
+          <Link to="/engineers" aria-current="page">
+            Ingenieros
+          </Link>
+        </NavbarItem>
+        <NavbarItem >
+          <Link to="/branches" aria-current="page">
+            Sucursales
+          </Link>
+        </NavbarItem>
+        <NavbarItem >
+          <Link to="/invoices" aria-current="page">
+            Facturas
           </Link>
         </NavbarItem>
         <NavbarItem>

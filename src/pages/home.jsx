@@ -4,19 +4,14 @@ import { useTheme } from "next-themes";
 import {
   Button,
   Input,
-  Tabs,
-  Tab,
   Card,
-  CardBody,
   CardFooter,
 } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import Logo from "../assets/logoBlanco.svg";
-import { AbstractShapes } from "../components/abstract.jsx";
 import { ParticlesBackground } from "../components/particles.jsx";
-import { use } from "react";
 
 function Home() {
   const {store, actions } = useContext(Context);
@@ -42,9 +37,9 @@ function Home() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#034AA6] to-[#0F6CA7]">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden ">
       <ParticlesBackground />
-      <AbstractShapes />
+            
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

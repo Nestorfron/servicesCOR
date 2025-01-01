@@ -1,59 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Plus, Search, Filter } from "lucide-react";
 import { Button, Card, Input, Badge } from "@nextui-org/react";
 
-const tickets = [
+const customers = [
   {
     id: "1",
-    clientId: "client1",
-    branchId: "branch1",
-    providerId: "provider1",
-    engineerId: "engineer1",
-    status: "open",
-    priority: "high",
-    description: "Network connectivity issues",
-    activities: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    name: "Empresa Alpha",
+    contact: "John Doe",
+    email: "contacto@alpha.com",
+    status: "active",
   },
   {
     id: "2",
-    clientId: "client2",
-    branchId: "branch2",
-    providerId: "provider2",
-    engineerId: "engineer2",
-    status: "in_progress",
-    priority: "medium",
-    description: "Server maintenance required",
-    activities: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    name: "Empresa Beta",
+    contact: "Jane Smith",
+    email: "contacto@beta.com",
+    status: "inactive",
   },
 ];
 
-
-export const Tickets = () => {
+export const Customers = () => {
   return (
     <div className="container mx-auto p-6 space-y-8">
-      {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Gestión de Tickets</h1>
+        <h1 className="text-3xl font-bold">Gestión de Clientes</h1>
         <Button
           onPress={() => setIsCreateDialogOpen(true)}
           className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white"
         >
-          <Plus className="mr-2 h-4 w-4" /> Nuevo Ticket
+          <Plus className="mr-2 h-4 w-4" /> Nuevo Cliente
         </Button>
       </div>
 
-      {/* Barra de búsqueda y filtros */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <Input
             className="pl-10"
-            placeholder="Buscar tickets..."
+            placeholder="Buscar clientes..."
             radius="lg"
             size="lg"
           />
@@ -66,11 +51,10 @@ export const Tickets = () => {
         </Button>
       </div>
 
-      {/* Lista de Tickets */}
       <div className="h-[calc(100vh-250px)] overflow-y-auto space-y-4">
-        {tickets.map((ticket) => (
+        {customers.map((client) => (
           <motion.div
-            key={ticket.id}
+            key={client.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -79,20 +63,25 @@ export const Tickets = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <Badge
-                    className="px-3 py-1 rounded-full"
+                    className={`px-3 py-1 rounded-full ${
+                      client.status === "active"
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
+                    }`}
                   >
-                    {ticket.status}
+                    {client.status === "active" ? "Activo" : "Inactivo"}
                   </Badge>
                   <div>
-                    <h3 className="font-medium text-lg">
-                      Ticket #{ticket.id}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {ticket.description}
-                    </p>
+                    <h3 className="font-medium text-lg">{client.name}</h3>
+                    <p className="text-sm text-gray-500">{client.contact}</p>
+                    <p className="text-sm text-gray-400">{client.email}</p>
                   </div>
                 </div>
-                <Button variant="bordered" size="sm" className="text-gray-600">
+                <Button
+                  variant="bordered"
+                  size="sm"
+                  className="text-gray-600"
+                >
                   Ver Detalles
                 </Button>
               </div>
@@ -100,6 +89,8 @@ export const Tickets = () => {
           </motion.div>
         ))}
       </div>
+
+     
     </div>
   );
 };
