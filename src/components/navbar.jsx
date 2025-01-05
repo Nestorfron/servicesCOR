@@ -28,7 +28,7 @@ export default function Navbar() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <p className="font-bold text-inherit">ServiceCOR</p>
+          <Link to="/">ServiceCOR</Link>
         </NavbarBrand>
       </NavbarContent>
 

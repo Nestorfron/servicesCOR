@@ -69,10 +69,12 @@ def login():
     if user is None:
         user = Engineer.query.filter_by(email=email).first()
         if user is None:
-            return jsonify({'message': 'Invalid email or password'}), 400
+            user = Provider.query.filter_by(email=email).first()
+            if user is None:
+                return jsonify({'message': 'Invalid email or password'}), 400
     if not check_password_hash(user.password, password):
         return jsonify({'message': 'Invalid email or password'}), 400
-    access_token = create_access_token({'id': user.id, 'role': user.role, 'name': user.name, 'email': user.email})
+    access_token = create_access_token({'id': user.id, 'email': user.email})
     return jsonify({'token': access_token}), 200
    
 
@@ -169,13 +171,15 @@ def new_provider():
     company_name = body.get('company_name', None)
     contact_person = body.get('contact_person', None)
     email = body.get('email', None)
+    password = body.get('password', None)
     phone_number = body.get('phone_number', None)
     state = body.get('state', None)
     zone = body.get('zone', None)
-    if company_name is None or contact_person is None or email is None or phone_number is None or state is None or zone is None:
+    if company_name is None or contact_person is None or email is None or password is None or phone_number is None or state is None or zone is None:
         return jsonify({'message': 'Missing parameters'}), 400
+    password_hash = generate_password_hash(password)
     try:   
-        new_provider = Provider(company_name=company_name, contact_person=contact_person, email=email, phone_number=phone_number, state=state, zone=zone)
+        new_provider = Provider(company_name=company_name, contact_person=contact_person, email=email, password=password_hash, phone_number=phone_number, state=state, zone=zone)
         db.session.add(new_provider)
         db.session.commit()
         return jsonify({"new_provider": new_provider.serialize()}), 201

@@ -5,9 +5,13 @@ import { Search, Filter } from "lucide-react";
 import { Button, Card, Input, Badge } from "@nextui-org/react";
 import { CreateCustomers } from "../components/create/createCustomers";
 import { EditCustomer } from "../components/edit/editCustomer";
+import useAuthCheck from "../hooks/useAuthCheck";
+
 
 export const Customers = () => {
   const {store, actions} = useContext(Context);
+
+  useAuthCheck();
   
   const customers = store.customers;
 

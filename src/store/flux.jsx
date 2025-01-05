@@ -130,7 +130,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to fetch providers: ${errorData.message}`);
           }
           const data = await response.json();
-          setStore({ providers: data });
+          console.log("data", data);
+          setStore({ providers: data.providers });
         } catch (error) {
           console.error("Fetch users error:", error);
         }
@@ -281,6 +282,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       createProvider: async (providerData) => {
+        const actions = getActions();
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/new_provider`,
@@ -290,7 +292,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({providerData}),
+              body: JSON.stringify(providerData),
             }
           );
           if (!response.ok) {
@@ -298,6 +300,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to create provider: ${errorData.message}`);
           }
           const newProvider = await response.json();
+          actions.fetchProviders();
           setStore((state) => ({
             providers: [...state.providers, newProvider],
           }));
@@ -514,7 +517,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({providerData}),
+              body: JSON.stringify(providerData),
             }
           );
           if (!response.ok) {

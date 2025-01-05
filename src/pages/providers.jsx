@@ -1,47 +1,29 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Context } from "../store/appContext";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, Truck, MapPin, Users } from "lucide-react";
+import { Plus, Search, Filter, Truck, MapPin, Users, Edit } from "lucide-react";
 import { Button, Card, CardHeader, CardBody, Input, Badge } from "@nextui-org/react";
+import useAuthCheck from "../hooks/useAuthCheck";
+import { CreateProviders } from "../components/create/createProviders";
+import { EditProvider } from "../components/edit/editProvider";
 
-const providers = [
-    {
-      id: 1,
-      name: "TechServ Solutions",
-      zones: ["Norte", "Centro"],
-      engineers: 5,
-      activeTickets: 3,
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Network Pro Services",
-      zones: ["Sur", "Este"],
-      engineers: 8,
-      activeTickets: 6,
-      status: "active",
-    },
-    {
-      id: 3,
-      name: "Security Systems Inc",
-      zones: ["Oeste", "Centro"],
-      engineers: 4,
-      activeTickets: 2,
-      status: "inactive",
-    },
-  ];
 
 export const Providers = () => {
-    return (
+  const {store, actions} = useContext(Context);
+
+  useAuthCheck();
+  
+  const providers = store.providers;
+
+  useEffect(() => {
+    actions.fetchProviders();
+  }, []);
+
+  return (
         <div className="container mx-auto p-6 space-y-8">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">Gestión de Proveedores</h1>
-            <Button
-              color="gradient"
-              startContent={<Plus className="h-4 w-4" />}
-              className="bg-gradient-to-r from-violet-500 to-purple-500"
-            >
-              Nuevo Proveedor
-            </Button>
+            <CreateProviders />
           </div>
     
           <div className="flex flex-col sm:flex-row gap-4">
@@ -72,7 +54,7 @@ export const Providers = () => {
                         <Truck className="h-6 w-6 text-violet-600" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-lg font-medium truncate">{provider.name}</p>
+                        <p className="text-lg font-medium truncate">{provider.company_name}</p>
                         <Badge
                           color={provider.status === "active" ? "success" : "neutral"}
                         >
@@ -83,11 +65,11 @@ export const Providers = () => {
                     <CardBody className="space-y-3 p-6">
                       <div className="flex items-center">
                         <MapPin className="h-4 w-4 text-gray-400 mr-2" />
-                        <span className="text-sm">Zonas: {provider.zones.join(", ")}</span>
+                        <span className="text-sm">Zonas: {provider.zone}</span>
                       </div>
                       <div className="flex items-center">
                         <Users className="h-4 w-4 text-gray-400 mr-2" />
-                        <span className="text-sm">Ingenieros: {provider.engineers}</span>
+                        <span className="text-sm">Ingenieros: {provider.engineers.length}</span>
                       </div>
                       <div className="flex items-center">
                         <Truck className="h-4 w-4 text-gray-400 mr-2" />
@@ -96,15 +78,7 @@ export const Providers = () => {
                         </span>
                       </div>
                       <div className="mt-6 flex justify-end space-x-2">
-                        <Button variant="bordered" size="sm">
-                          Ver Detalles
-                        </Button>
-                        <Button variant="bordered" size="sm">
-                          Editar
-                        </Button>
-                        <Button color="danger" size="sm">
-                          Eliminar
-                        </Button>
+                       <EditProvider provider={provider} id={provider.id} />
                       </div>
                     </CardBody>
                   </Card>
