@@ -108,7 +108,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to fetch customers: ${errorData.message}`);
           }
           const data = await response.json();
-          setStore({ customers: data });
+          setStore({ customers: data.customers });
         } catch (error) {
           console.error("Fetch customers error:", error);
         }
@@ -262,7 +262,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({customerData}),
+              body: JSON.stringify(customerData),
             }
           );
           if (!response.ok) {
@@ -471,6 +471,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       //EDIT ACTIONS://
 
       updateCustomer: async (id, customerData) => {
+        const actions = getActions();
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/customers/${id}`,
@@ -480,7 +481,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({customerData}),
+              body: JSON.stringify(customerData),
             }
           );
           if (!response.ok) {
@@ -493,6 +494,7 @@ const getState = ({ getStore, getActions, setStore }) => {
               customer.id === id ? updatedCustomer : customer
             ),
           }));
+          actions.fetchCustomers();
           return updatedCustomer;
         } catch (error) {
           console.error("Update customer error:", error);

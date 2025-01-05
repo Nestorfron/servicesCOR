@@ -1,36 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Context } from "../store/appContext";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { Button, Card, Input, Badge } from "@nextui-org/react";
-
-const customers = [
-  {
-    id: "1",
-    name: "Empresa Alpha",
-    contact: "John Doe",
-    email: "contacto@alpha.com",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Empresa Beta",
-    contact: "Jane Smith",
-    email: "contacto@beta.com",
-    status: "inactive",
-  },
-];
+import { CreateCustomers } from "../components/create/createCustomers";
+import { EditCustomer } from "../components/edit/editCustomer";
 
 export const Customers = () => {
+  const {store, actions} = useContext(Context);
+  
+  const customers = store.customers;
+
+  useEffect(() => {
+    actions.fetchCustomers();
+  }, []);
+
   return (
     <div className="container mx-auto p-6 space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Gestión de Clientes</h1>
-        <Button
-          onPress={() => setIsCreateDialogOpen(true)}
-          className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white"
-        >
-          <Plus className="mr-2 h-4 w-4" /> Nuevo Cliente
-        </Button>
+        <CreateCustomers />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
@@ -52,14 +41,14 @@ export const Customers = () => {
       </div>
 
       <div className="h-[calc(100vh-250px)] overflow-y-auto space-y-4">
-        {customers.map((client) => (
+        {customers.map((client, index) => (
           <motion.div
-            key={client.id}
+            key={client.id + index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
           >
-            <Card className="p-4 shadow-lg border">
+            <Card key={client.id + index} className="p-4 shadow-lg border">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <Badge
@@ -73,17 +62,13 @@ export const Customers = () => {
                   </Badge>
                   <div>
                     <h3 className="font-medium text-lg">{client.name}</h3>
-                    <p className="text-sm text-gray-500">{client.contact}</p>
+                    <p className="text-sm text-gray-500">{client.address}</p>
+                    <p className="text-sm text-gray-500">{client.contact_person}</p>
+                    <p className="text-sm text-gray-500">{client.phone_number}</p>
                     <p className="text-sm text-gray-400">{client.email}</p>
                   </div>
                 </div>
-                <Button
-                  variant="bordered"
-                  size="sm"
-                  className="text-gray-600"
-                >
-                  Ver Detalles
-                </Button>
+                <EditCustomer customer={client} id={client.id} />
               </div>
             </Card>
           </motion.div>

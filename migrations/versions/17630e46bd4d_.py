@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1ba004b1f441
+Revision ID: 17630e46bd4d
 Revises: 
-Create Date: 2024-12-28 18:56:10.141210
+Create Date: 2025-01-04 10:34:28.425955
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1ba004b1f441'
+revision = '17630e46bd4d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,6 +33,7 @@ def upgrade():
     sa.Column('company_name', sa.String(length=255), nullable=False),
     sa.Column('contact_person', sa.String(length=255), nullable=True),
     sa.Column('email', sa.String(length=255), nullable=True),
+    sa.Column('password', sa.String(length=255), nullable=False),
     sa.Column('phone_number', sa.String(length=20), nullable=True),
     sa.Column('state', sa.String(length=100), nullable=True),
     sa.Column('zone', sa.String(length=100), nullable=True),
@@ -52,7 +53,19 @@ def upgrade():
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('customer_id', sa.BigInteger(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('Social_Registration', sa.BigInteger(), nullable=True),
     sa.Column('address', sa.Text(), nullable=True),
+    sa.Column('colony', sa.String(length=100), nullable=True),
+    sa.Column('postal_code', sa.String(length=100), nullable=True),
+    sa.Column('city', sa.String(length=100), nullable=True),
+    sa.Column('municipality', sa.String(length=100), nullable=True),
+    sa.Column('state', sa.String(length=100), nullable=True),
+    sa.Column('contact_1', sa.String(length=100), nullable=True),
+    sa.Column('phone_1', sa.String(length=100), nullable=True),
+    sa.Column('contact_2', sa.String(length=100), nullable=True),
+    sa.Column('phone_2', sa.String(length=100), nullable=True),
+    sa.Column('email', sa.String(length=100), nullable=True),
+    sa.Column('schredule', sa.String(length=100), nullable=True),
     sa.ForeignKeyConstraint(['customer_id'], ['customers.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -64,6 +77,7 @@ def upgrade():
     sa.Column('provider_id', sa.BigInteger(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=True),
+    sa.Column('password', sa.String(length=255), nullable=False),
     sa.Column('phone_number', sa.String(length=20), nullable=True),
     sa.ForeignKeyConstraint(['provider_id'], ['providers.id'], ),
     sa.PrimaryKeyConstraint('id'),

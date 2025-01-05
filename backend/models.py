@@ -52,6 +52,7 @@ class Provider(db.Model):
     company_name = db.Column(db.String(255), nullable=False)
     contact_person = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(255), unique=True, nullable=True)
+    password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
     state = db.Column(db.String(100), nullable=True)
     zone = db.Column(db.String(100), nullable=True)
@@ -105,7 +106,19 @@ class Branch(db.Model):
     customer_id = db.Column(db.BigInteger, db.ForeignKey('customers.id'), nullable=False, index=True)
 
     name = db.Column(db.String(255), nullable=False)
+    Social_Registration = db.Column(db.BigInteger, nullable=True)
     address = db.Column(db.Text, nullable=True)
+    colony = db.Column(db.String(100), nullable=True)
+    postal_code = db.Column(db.String(100), nullable=True)
+    city = db.Column(db.String(100), nullable=True)
+    municipality = db.Column(db.String(100), nullable=True)
+    state = db.Column(db.String(100), nullable=True)
+    contact_1 = db.Column(db.String(100), nullable=True)
+    phone_1 = db.Column(db.String(100), nullable=True)
+    contact_2 = db.Column(db.String(100), nullable=True)
+    phone_2 = db.Column(db.String(100), nullable=True)
+    email = db.Column(db.String(100), nullable=True)
+    schredule = db.Column(db.String(100), nullable=True)
 
     customer = db.relationship('Customer', backref=db.backref('branches', lazy='dynamic'))
 
@@ -117,7 +130,19 @@ class Branch(db.Model):
             'id': self.id,
             'customer_id': self.customer_id,
             'name': self.name,
-            'address': self.address
+            'Social_Registration': self.Social_Registration,
+            'address': self.address,
+            'colony': self.colony,
+            'postal_code': self.postal_code,
+            'city': self.city,
+            'municipality': self.municipality,
+            'state': self.state,
+            'contact_1': self.contact_1,
+            'phone_1': self.phone_1,
+            'contact_2': self.contact_2,
+            'phone_2': self.phone_2,
+            'email': self.email,
+            'schredule': self.schredule
         }
 
 
