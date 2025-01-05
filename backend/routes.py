@@ -304,7 +304,8 @@ def edit_customer(id):
     contact_person = body.get('contact_person')
     email = body.get('email')
     phone_number = body.get('phone_number')
-    if name is None or address is None or contact_person is None or email is None or phone_number is None:
+    is_active = body.get('is_active')
+    if name is None or address is None or contact_person is None or email is None or phone_number is None or is_active is None:
         return jsonify({'message': 'Missing parameters'}), 400
     try:
         customer = Customer.query.get(id)
@@ -313,6 +314,7 @@ def edit_customer(id):
         customer.contact_person = contact_person
         customer.email = email
         customer.phone_number = phone_number
+        customer.is_active = is_active
         db.session.commit()
         return jsonify(customer.serialize())
     except Exception as e:

@@ -53,12 +53,10 @@ export const Customers = () => {
                 <div className="flex items-center space-x-4">
                   <Badge
                     className={`px-3 py-1 rounded-full ${
-                      client.status === "active"
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
+                      client.is_active ? "bg-green-500 text-white" : "bg-red-500 text-white"
                     }`}
                   >
-                    {client.status === "active" ? "Activo" : "Inactivo"}
+                    {client.is_active ? "Activo" : "Inactivo"}
                   </Badge>
                   <div>
                     <h3 className="font-medium text-lg">{client.name}</h3>

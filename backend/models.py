@@ -30,6 +30,7 @@ class Customer(db.Model):
     contact_person = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(255), unique=True, nullable=True)
     phone_number = db.Column(db.String(20), nullable=True)
+    is_active = db.Column(db.Boolean, nullable=True, default=True)
 
     def __repr__(self):
         return f'<Customer {self.name}>'
@@ -41,7 +42,8 @@ class Customer(db.Model):
             'address': self.address,
             'contact_person': self.contact_person,
             'email': self.email,
-            'phone_number': self.phone_number
+            'phone_number': self.phone_number,
+            'is_active': self.is_active
         }
 
 

@@ -253,6 +253,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       //POST ACTIONS://
 
       createCustomer: async (customerData) => {
+        const actions = getActions();
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/new_customer`,
@@ -271,6 +272,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const newCustomer = await response.json();
           setStore((state) => ({ customers: [...state.customers, newCustomer] }));
+          actions.fetchCustomers();
           return newCustomer;
         } catch (error) {
           console.error("Create customer error:", error);

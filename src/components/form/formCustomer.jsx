@@ -3,16 +3,19 @@ import { Context } from "../../store/appContext";
 import {
   Button,
   Input,
+  Switch,
 } from "@nextui-org/react";
 
 export const FormCustomer = ({id, btnCustomer, customer: initialCustomer}) => {
   const {actions} = useContext(Context);
+  const [isSelected, setIsSelected] = React.useState(true);
   const [customer, setCustomer] = useState({
     name: "",
     address: "",
     contact_person: "",
     email: "",
     phone_number: "",
+    is_active: false,
   });
 
   const handleSubmit = (e) => {
@@ -24,6 +27,7 @@ export const FormCustomer = ({id, btnCustomer, customer: initialCustomer}) => {
     actions.fetchCustomers();
     if (initialCustomer) {
       setCustomer(initialCustomer.customer);
+      setIsSelected(initialCustomer.customer.is_active);
     }
   }, []);
 
@@ -61,6 +65,12 @@ export const FormCustomer = ({id, btnCustomer, customer: initialCustomer}) => {
           value={customer.phone_number}
           onChange={(e) => setCustomer({ ...customer, phone_number: e.target.value })}
         />
+        <Switch
+          label="Activo"
+          checked={customer.is_active}
+          isSelected={customer.is_active}
+          onChange={(e) => setCustomer({ ...customer, is_active: e.target.checked })}
+        >Activo</Switch>
         <Button type="submit" color="primary" className="mt-4">
           {btnCustomer}
         </Button>
