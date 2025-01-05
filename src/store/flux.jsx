@@ -130,7 +130,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to fetch providers: ${errorData.message}`);
           }
           const data = await response.json();
-          console.log("data", data);
           setStore({ providers: data.providers });
         } catch (error) {
           console.error("Fetch users error:", error);
@@ -508,6 +507,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       updateProvider: async (id, providerData) => {
+        const actions = getActions();
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/providers/${id}`,
@@ -530,6 +530,7 @@ const getState = ({ getStore, getActions, setStore }) => {
               provider.id === id ? updatedProvider : provider
             ),
           }));
+          actions.fetchProviders();
           return updatedProvider;
         } catch (error) {
           console.error("Update provider error:", error);

@@ -74,7 +74,7 @@ def login():
                 return jsonify({'message': 'Invalid email or password'}), 400
     if not check_password_hash(user.password, password):
         return jsonify({'message': 'Invalid email or password'}), 400
-    access_token = create_access_token({'id': user.id, 'email': user.email})
+    access_token = create_access_token({'id': user.id, 'email': user.email, 'role': user.role})
     return jsonify({'token': access_token}), 200
    
 
@@ -172,14 +172,16 @@ def new_provider():
     contact_person = body.get('contact_person', None)
     email = body.get('email', None)
     password = body.get('password', None)
+    role = body.get('role', None)
     phone_number = body.get('phone_number', None)
     state = body.get('state', None)
     zone = body.get('zone', None)
-    if company_name is None or contact_person is None or email is None or password is None or phone_number is None or state is None or zone is None:
+    is_active = body.get('is_active', None)
+    if company_name is None or contact_person is None or email is None or password is None or role is None or phone_number is None or state is None or zone is None or is_active is None:
         return jsonify({'message': 'Missing parameters'}), 400
     password_hash = generate_password_hash(password)
     try:   
-        new_provider = Provider(company_name=company_name, contact_person=contact_person, email=email, password=password_hash, phone_number=phone_number, state=state, zone=zone)
+        new_provider = Provider(company_name=company_name, contact_person=contact_person, email=email, password=password_hash, role=role, phone_number=phone_number, state=state, zone=zone, is_active=is_active)
         db.session.add(new_provider)
         db.session.commit()
         return jsonify({"new_provider": new_provider.serialize()}), 201
@@ -330,19 +332,26 @@ def edit_provider(id):
     company_name = body.get('company_name')
     contact_person = body.get('contact_person')
     email = body.get('email')
+    role = body.get('role')
+    password = body.get('password')
     phone_number = body.get('phone_number')
     state = body.get('state')
     zone = body.get('zone')
-    if company_name is None or contact_person is None or email is None or phone_number is None or state is None or zone is None:
+    is_active = body.get('is_active')
+    if company_name is None or contact_person is None or email is None or role is None or password is None or phone_number is None or state is None or zone is None or is_active is None:
         return jsonify({'message': 'Missing parameters'}), 400
+    password_hash = generate_password_hash(password)
     try:
         provider = Provider.query.get(id)
         provider.company_name = company_name
         provider.contact_person = contact_person
         provider.email = email
+        provider.role = role
+        provider.password = password_hash
         provider.phone_number = phone_number
         provider.state = state
         provider.zone = zone
+        provider.is_active = is_active
         db.session.commit()
         return jsonify(provider.serialize())
     except Exception as e:

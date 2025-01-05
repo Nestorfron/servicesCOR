@@ -55,11 +55,14 @@ class Provider(db.Model):
     contact_person = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(255), unique=True, nullable=True)
     password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=True)
     phone_number = db.Column(db.String(20), nullable=True)
     state = db.Column(db.String(100), nullable=True)
     zone = db.Column(db.String(100), nullable=True)
+    is_active = db.Column(db.Boolean, nullable=True, default=True)
 
     engineers = db.relationship('Engineer', backref=db.backref('provider'))
+    tickets = db.relationship('Ticket', backref=db.backref('provider_tikets'))
 
     def __repr__(self):
         return f'<Provider {self.company_name}>'
@@ -70,10 +73,13 @@ class Provider(db.Model):
             'company_name': self.company_name,
             'contact_person': self.contact_person,
             'email': self.email,
+            'role': self.role,
             'phone_number': self.phone_number,
             'state': self.state,
             'zone': self.zone,
-            'engineers': [engineer.serialize() for engineer in self.engineers]
+            'is_active': self.is_active,
+            'engineers': [engineer.serialize() for engineer in self.engineers],
+            'tickets': [ticket.serialize() for ticket in self.tickets]
         }
 
 
@@ -189,7 +195,6 @@ class Ticket(db.Model):
 
 
     customer = db.relationship('Customer', backref=db.backref('tickets', lazy='dynamic'))
-    provider = db.relationship('Provider', backref=db.backref('tickets', lazy='dynamic'))
     engineer = db.relationship('Engineer', backref=db.backref('tickets', lazy='dynamic'))
     branch = db.relationship('Branch', backref=db.backref('tickets', lazy='dynamic'))
 

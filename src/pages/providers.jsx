@@ -56,9 +56,9 @@ export const Providers = () => {
                       <div className="flex-1">
                         <p className="text-lg font-medium truncate">{provider.company_name}</p>
                         <Badge
-                          color={provider.status === "active" ? "success" : "neutral"}
+                          color={provider.is_active === true ? "success" : "neutral"}
                         >
-                          {provider.status === "active" ? "Activo" : "Inactivo"}
+                          {provider.is_active === true ? "Activo" : "Inactivo"}
                         </Badge>
                       </div>
                     </CardHeader>
@@ -74,7 +74,7 @@ export const Providers = () => {
                       <div className="flex items-center">
                         <Truck className="h-4 w-4 text-gray-400 mr-2" />
                         <span className="text-sm">
-                          Tickets Activos: {provider.activeTickets}
+                          Tickets Activos: {provider.tickets.length}
                         </span>
                       </div>
                       <div className="mt-6 flex justify-end space-x-2">

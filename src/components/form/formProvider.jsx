@@ -8,14 +8,17 @@ import {
 
 export const FormProvider = ({id, btnProvider, provider: initialProvider}) => {
   const {actions} = useContext(Context);
+  const [isSelected, setIsSelected] = React.useState(true);
   const [provider, setProvider] = useState({
     company_name: "",
     contact_person: "",
     email: "",
     password: "",
+    role: "Provider",
     phone_number: "",
     state: "",
     zone: "",
+    is_active: false,
   });
 
   const handleSubmit = (e) => {
@@ -27,6 +30,7 @@ export const FormProvider = ({id, btnProvider, provider: initialProvider}) => {
     actions.fetchProviders();
     if (initialProvider) {
       setProvider(initialProvider.provider);
+      setIsSelected(initialProvider.provider.is_active);
     }
   }, []);
 
@@ -50,6 +54,7 @@ export const FormProvider = ({id, btnProvider, provider: initialProvider}) => {
           onChange={(e) => setProvider({ ...provider, email: e.target.value })}
         />
         <Input
+          isRequired
           label="Contraseña"
           type="password"
           value={provider.password}
@@ -70,6 +75,12 @@ export const FormProvider = ({id, btnProvider, provider: initialProvider}) => {
           value={provider.zone}
           onChange={(e) => setProvider({ ...provider, zone: e.target.value })}
         />
+        <Switch
+          label="Activo"
+          checked={provider.is_active}
+          isSelected={provider.is_active}
+          onChange={(e) => setProvider({ ...provider, is_active: e.target.checked })}
+        >Activo</Switch>
         <Button type="submit" color="primary" className="mt-4">
           {btnProvider}
         </Button>
