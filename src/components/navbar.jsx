@@ -1,11 +1,23 @@
 import React from "react";
-import {Navbar as Navbarui, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Button} from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
+import {
+  Navbar as Navbarui,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Button,
+} from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { useTheme } from "next-themes";
+import { Sun, Moon, User, UserXIcon } from "lucide-react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const {theme, setTheme}= useTheme();
+  const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
 
   const menuItems = [
     "Profile",
@@ -20,8 +32,19 @@ export default function Navbar() {
     "Log Out",
   ];
 
+  const jwt = localStorage.getItem("token");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
-    <Navbarui className="bg-base-100 shadow-lg" color="foreground" position="static">
+    <Navbarui
+      className="bg-base-100 shadow-lg"
+      color="foreground"
+      position="static"
+    >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -32,70 +55,69 @@ export default function Navbar() {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem >
-          <Link  to="/dashboard">
-            Dashboard
-          </Link>
+      {jwt && <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem>
+          <Link to="/dashboard">Dashboard</Link>
         </NavbarItem>
-        <NavbarItem >
+        <NavbarItem>
           <Link to="/tickets" aria-current="page">
             Nuevo Reporte
           </Link>
         </NavbarItem>
-        <NavbarItem >
+        <NavbarItem>
           <Link to="/customers" aria-current="page">
             Clientes
           </Link>
         </NavbarItem>
-        <NavbarItem >
+        <NavbarItem>
           <Link to="/providers" aria-current="page">
             Proveedores
           </Link>
         </NavbarItem>
-        <NavbarItem >
+        <NavbarItem>
           <Link to="/engineers" aria-current="page">
             Ingenieros
           </Link>
         </NavbarItem>
-        <NavbarItem >
+        <NavbarItem>
           <Link to="/branches" aria-current="page">
             Sucursales
           </Link>
         </NavbarItem>
-        <NavbarItem >
+        <NavbarItem>
           <Link to="/invoices" aria-current="page">
             Facturas
           </Link>
         </NavbarItem>
-        <NavbarItem>
-        <div>
-      
-        <Button color="primary" onClick={() => setTheme("light")}>
-          Light Mode
-        </Button>
-        <Button color="primary" onClick={() => setTheme("dark")}>
-          Dark Mode
-        </Button>
-      </div>
-        </NavbarItem>
-      </NavbarContent>
+      </NavbarContent>}
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link to="#">Login</Link>
+      <NavbarItem>
+          <div>
+            {theme === "light" ? (
+              <Sun className="h-6 w-6" onClick={() => setTheme("dark")} />
+            ) : (
+              <Moon className="h-6 w-6" onClick={() => setTheme("light")} />
+            )}
+          </div>
         </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" to="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {jwt && (
+          <NavbarItem className="lg:flex">
+            <Link to="/" onClick={logout}>
+              <UserXIcon className="h-6 w-6" />
+            </Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
               color={
-                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
+                index === 2
+                  ? "primary"
+                  : index === menuItems.length - 1
+                  ? "danger"
+                  : "foreground"
               }
               className="w-full"
               to="#"
