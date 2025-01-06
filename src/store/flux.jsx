@@ -130,7 +130,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to fetch providers: ${errorData.message}`);
           }
           const data = await response.json();
+          const providers = data.providers || [];
           setStore({ providers: data.providers });
+          return providers
         } catch (error) {
           console.error("Fetch users error:", error);
         }
@@ -152,7 +154,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to fetch engineers: ${errorData.message}`);
           }
           const data = await response.json();
-          setStore({ engineers: data });
+          const engineers = data.engineers || [];
+          setStore({ engineers: data.engineers });
+          return engineers
         } catch (error) {
           console.error("Fetch engineers error:", error);
         }
@@ -175,6 +179,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ branches: data });
+          return branches
         } catch (error) {
           console.error("Fetch branches error:", error);
         }
@@ -197,6 +202,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ tickets: data });
+          return tickets
         } catch (error) {
           console.error("Fetch tickets error:", error);
         }
@@ -222,6 +228,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ history_tickets: data });
+          return history_tickets
         } catch (error) {
           console.error("Fetch tickets history error:", error);
         }
@@ -245,6 +252,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ invoices: data });
+          return invoices
         } catch (error) {
           console.error("Fetch invoices error:", error);
         }
@@ -320,7 +328,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({engineerData}),
+              body: JSON.stringify(engineerData),
             }
           );
           if (!response.ok) {
@@ -348,7 +356,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({branchData}),
+              body: JSON.stringify(branchData),
             }
           );
           if (!response.ok) {
@@ -548,7 +556,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({engineerData}),
+              body: JSON.stringify(engineerData),
             }
           );
           if (!response.ok) {

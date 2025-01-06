@@ -367,7 +367,10 @@ def edit_engineer(id):
     if provider_id is None or name is None or email is None or phone_number is None:
         return jsonify({'message': 'Missing parameters'}), 400
     try:
-        engineer = engineer.query.get(id)
+        engineer = Engineer.query.get(id)  # Use the correct model name
+        if not engineer:
+            return jsonify({'message': 'Engineer not found'}), 404
+        
         engineer.provider_id = provider_id
         engineer.name = name
         engineer.email = email
