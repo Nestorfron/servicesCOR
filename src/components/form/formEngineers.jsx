@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../../store/appContext";
 import { Button, Input } from "@nextui-org/react";
 
-export const FormEngineer = ({ id, btnEngineer, engineer: initialEngineer }) => {
+export const FormEngineer = ({ id, btnEngineer, engineer: initialEngineer, onClose }) => {
   const { actions } = useContext(Context);
   const [providers, setProviders] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState("");
@@ -22,12 +22,15 @@ export const FormEngineer = ({ id, btnEngineer, engineer: initialEngineer }) => 
     if (id) {
       actions.updateEngineer(id, engineer).then(() => {
         actions.fetchEngineers();
+        onClose()
       });
     } else {
       actions.createEngineer(engineer).then(() => {
         actions.fetchEngineers();
+        onClose()
       });
     }
+   
   };
 
   useEffect(() => {

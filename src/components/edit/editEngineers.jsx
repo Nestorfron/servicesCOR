@@ -18,7 +18,6 @@ export const EditEngineer = ({engineer}) => {
 
   return (
     <>
-      {" "}
       <Button
         onPress={openModal}
         className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white"
@@ -31,7 +30,7 @@ export const EditEngineer = ({engineer}) => {
             <>
               <ModalHeader className="flex flex-col gap-1">Editar Ingeniero</ModalHeader>
               <ModalBody>
-                <FormEngineer btnProvider={"Editar"} id={engineer.id} engineer={engineer} />
+                <FormEngineer btnEngineer={"Editar"} id={engineer.id} engineer={engineer} onClose={onClose} />
               </ModalBody>
             </>
           )}

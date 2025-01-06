@@ -24,7 +24,7 @@ export const CreateEngineers = () => {
       >
         <Plus className="mr-2 h-4 w-4" /> Nuevo Ingeniero
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} >
         <ModalContent>
           {(onClose) => (
             <>
@@ -32,7 +32,7 @@ export const CreateEngineers = () => {
                 Nuevo Ingeniero
               </ModalHeader>
               <ModalBody>
-                <FormEngineer btnEngineer={"Crear"} />
+                <FormEngineer btnEngineer={"Crear"} onClose={onClose} />
               </ModalBody>
             </>
           )}
