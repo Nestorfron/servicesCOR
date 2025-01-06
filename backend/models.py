@@ -30,7 +30,9 @@ class Customer(db.Model):
     contact_person = db.Column(db.String(255), nullable=True)
     email = db.Column(db.String(255), unique=True, nullable=True)
     phone_number = db.Column(db.String(20), nullable=True)
+    role = db.Column(db.String(50), nullable=True)
     is_active = db.Column(db.Boolean, nullable=True, default=True)
+
 
     def __repr__(self):
         return f'<Customer {self.name}>'
@@ -43,6 +45,7 @@ class Customer(db.Model):
             'contact_person': self.contact_person,
             'email': self.email,
             'phone_number': self.phone_number,
+            'role': self.role,
             'is_active': self.is_active
         }
 
@@ -93,6 +96,9 @@ class Engineer(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=True)
     password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
+    role = db.Column(db.String(50), nullable=True)
+    is_active = db.Column(db.Boolean, nullable=True, default=True)
+
 
     def __repr__(self):
         return f'<Engineer {self.name}>'
@@ -103,7 +109,9 @@ class Engineer(db.Model):
             'provider_id': self.provider_id,
             'name': self.name,
             'email': self.email,
-            'phone_number': self.phone_number
+            'phone_number': self.phone_number,
+            'role': self.role,
+            'is_active': self.is_active
         }
 
 

@@ -19,19 +19,6 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
 
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
-
   const jwt = localStorage.getItem("token");
 
   const logout = () => {
@@ -46,22 +33,21 @@ export default function Navbar() {
       position="static"
     >
       <NavbarContent>
-        <NavbarMenuToggle
+        {jwt && <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
-        />
+          className="md:hidden"
+        />}
         <NavbarBrand>
-          <Link to="/">ServiceCOR</Link>
+          <Link to="/dashboard">ServiceCOR</Link>
         </NavbarBrand>
       </NavbarContent>
-
-      {jwt && <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      {jwt && <NavbarContent className="hidden md:flex gap-4" justify="center">
         <NavbarItem>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/dashboard">Inicio</Link>
         </NavbarItem>
         <NavbarItem>
           <Link to="/tickets" aria-current="page">
-            Nuevo Reporte
+            Reportes
           </Link>
         </NavbarItem>
         <NavbarItem>
@@ -94,9 +80,9 @@ export default function Navbar() {
       <NavbarItem>
           <div>
             {theme === "light" ? (
-              <Sun className="h-6 w-6" onClick={() => setTheme("dark")} />
+              <Moon className="h-6 w-6" onClick={() => setTheme("dark")} /> 
             ) : (
-              <Moon className="h-6 w-6" onClick={() => setTheme("light")} />
+              <Sun className="h-6 w-6" onClick={() => setTheme("light")} />
             )}
           </div>
         </NavbarItem>
@@ -109,24 +95,41 @@ export default function Navbar() {
         )}
       </NavbarContent>
       <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              className="w-full"
-              to="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+      {jwt && <>
+        <NavbarMenuItem>
+          <Link to="/dashboard">Inicio</Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link to="/tickets" aria-current="page">
+            Reportes
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link to="/customers" aria-current="page">
+            Clientes
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link to="/providers" aria-current="page">
+            Proveedores
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link to="/engineers" aria-current="page">
+            Ingenieros
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link to="/branches" aria-current="page">
+            Sucursales
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Link to="/invoices" aria-current="page">
+            Facturas
+          </Link>
+        </NavbarMenuItem>
+      </>}
       </NavbarMenu>
     </Navbarui>
   );
