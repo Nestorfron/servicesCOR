@@ -1,56 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Context } from "../store/appContext";
 import { motion } from "framer-motion";
-import { Button, Card, CardBody, Input, Badge, Avatar } from "@nextui-org/react";
-import { Plus, Search, Filter } from "lucide-react";
-
-const engineers = [
-  {
-    id: 1,
-    name: "Juan Pérez",
-    email: "juan@example.com",
-    specialization: "Redes",
-    provider: "TechServ Solutions",
-    availability: true,
-  },
-  {
-    id: 2,
-    name: "Ana García",
-    email: "ana@example.com",
-    specialization: "Servidores",
-    provider: "Network Pro Services",
-    availability: false,
-  },
-  {
-    id: 3,
-    name: "Carlos López",
-    email: "carlos@example.com",
-    specialization: "Seguridad",
-    provider: "Security Systems Inc",
-    availability: true,
-  },
-];
+import { Plus, Search, Filter, User, Phone, Mail, Edit, Building } from 'lucide-react';
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Input,
+  Badge,
+} from "@nextui-org/react";
+import useAuthCheck from "../hooks/useAuthCheck";
+import { CreateEngineers } from "../components/create/createEngineers";
+import { EditEngineer } from "../components/edit/editEngineers";
 
 export const Engineers = () => {
+  const { store, actions } = useContext(Context);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    actions.fetchEngineers();
+    actions.fetchProviders();
+  }, []);
+
+  const getProviderName = (provider_id) => {
+    const provider = store.providers.find((p) => p.id === provider_id);
+    return provider ? provider.company_name : "Unknown Provider";
+  };
+
+  const filteredEngineers = store.engineers.filter((engineer) => {
+    const searchString = searchTerm.toLowerCase();
+    return (
+      engineer.name.toLowerCase().includes(searchString) ||
+      engineer.email.toLowerCase().includes(searchString) ||
+      engineer.phone_number.toLowerCase().includes(searchString) ||
+      getProviderName(engineer.provider_id).toLowerCase().includes(searchString)
+    );
+  });
+
   return (
     <div className="container mx-auto p-6 space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Gestión de Ingenieros</h1>
-        <Button
-          className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600"
-          startContent={<Plus className="h-4 w-4" />}
-        >
-          Nuevo Ingeniero
-        </Button>
+        <CreateEngineers />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input className="pl-10" placeholder="Buscar ingenieros..." />
+          <Input 
+            placeholder="Buscar ingenieros..." 
+            className="pl-10" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <Button
-          variant="flat"
-          className="border border-gray-300 hover:bg-gray-100"
+          variant="bordered"
           startContent={<Filter className="h-4 w-4" />}
         >
           Filtros
@@ -58,65 +64,57 @@ export const Engineers = () => {
       </div>
 
       <div className="h-[calc(100vh-250px)] overflow-y-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {engineers.map((engineer) => (
-            <motion.div
-              key={engineer.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Card>
-                <CardBody className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <Avatar
-                      className="h-12 w-12"
-                      src={`https://api.dicebear.com/6.x/initials/svg?seed=${engineer.name}`}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">
+        {filteredEngineers.length === 0 ? (
+          <p className="text-center text-gray-500 text-lg mt-10">
+            No se encontraron ingenieros
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredEngineers.map((engineer) => (
+              <motion.div
+                key={engineer.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Card>
+                  <CardHeader className="flex items-center space-x-4 p-6">
+                    <div className="p-2 bg-blue-100 rounded-full">
+                      <User className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-medium truncate">
                         {engineer.name}
-                      </p>
-                      <p className="text-sm text-gray-500 truncate">
-                        {engineer.email}
-                      </p>
+                      </h3>
                     </div>
-                    <Badge
-                      color={engineer.availability ? "success" : "default"}
-                    >
-                      {engineer.availability ? "Disponible" : "No Disponible"}
-                    </Badge>
-                  </div>
-                  <div className="mt-4 space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">
-                        Especialización:
-                      </span>
-                      <span className="text-sm font-medium">
-                        {engineer.specialization}
+                  </CardHeader>
+                  <CardBody className="space-y-3 p-6">
+                    <div className="flex items-center">
+                      <Building className="h-4 w-4 text-gray-400 mr-2" />
+                      <span className="text-sm">
+                        {getProviderName(engineer.provider_id)}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">Proveedor:</span>
-                      <span className="text-sm font-medium">
-                        {engineer.provider}
-                      </span>
+                    <div className="flex items-center">
+                      <Mail className="h-4 w-4 text-gray-400 mr-2" />
+                      <span className="text-sm">{engineer.email}</span>
                     </div>
-                  </div>
-                  <div className="mt-6 flex justify-end space-x-2">
-                    <Button variant="flat" size="sm">
-                      Editar
-                    </Button>
-                    <Button color="danger" variant="flat" size="sm">
-                      Eliminar
-                    </Button>
-                  </div>
-                </CardBody>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+                    <div className="flex items-center">
+                      <Phone className="h-4 w-4 text-gray-400 mr-2" />
+                      <span className="text-sm">{engineer.phone_number}</span>
+                    </div>
+                    <div className="mt-6 flex justify-end space-x-2">
+                      <EditEngineer engineer={engineer} />
+                    </div>
+                  </CardBody>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
+//FALTA LA PARTE DEL FILTRO
