@@ -1,7 +1,4 @@
-
 const getState = ({ getStore, getActions, setStore }) => {
-
-
   return {
     store: {
       users: [],
@@ -15,7 +12,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       invoices: [],
     },
     actions: {
-  
       //AUTHETICATION ACTIONS://
 
       signup: async (userData) => {
@@ -28,7 +24,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({userData}),
+              body: JSON.stringify({ userData }),
             }
           );
           if (!response.ok) {
@@ -53,7 +49,7 @@ const getState = ({ getStore, getActions, setStore }) => {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({email, password}),
+              body: JSON.stringify({ email, password }),
             }
           );
           if (!response.ok) {
@@ -79,7 +75,8 @@ const getState = ({ getStore, getActions, setStore }) => {
               headers: {
                 authorization: `Bearer ${jwt}`,
               },
-            });
+            }
+          );
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Failed to fetch users: ${errorData.message}`);
@@ -107,8 +104,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             const errorData = await response.json();
             throw new Error(`Failed to fetch customers: ${errorData.message}`);
           }
+
           const data = await response.json();
           setStore({ customers: data.customers });
+          return data.customers;
         } catch (error) {
           console.error("Fetch customers error:", error);
         }
@@ -132,7 +131,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           const data = await response.json();
           const providers = data.providers || [];
           setStore({ providers: data.providers });
-          return providers
+          return providers;
         } catch (error) {
           console.error("Fetch users error:", error);
         }
@@ -156,7 +155,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           const data = await response.json();
           const engineers = data.engineers || [];
           setStore({ engineers: data.engineers });
-          return engineers
+          return engineers;
         } catch (error) {
           console.error("Fetch engineers error:", error);
         }
@@ -178,8 +177,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to fetch branches: ${errorData.message}`);
           }
           const data = await response.json();
-          setStore({ branches: data });
-          return branches
+          const branches = data.branches || [];
+          setStore({ branches: data.branches })
+          return branches;
         } catch (error) {
           console.error("Fetch branches error:", error);
         }
@@ -202,7 +202,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ tickets: data });
-          return tickets
+          return tickets;
         } catch (error) {
           console.error("Fetch tickets error:", error);
         }
@@ -228,7 +228,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ history_tickets: data });
-          return history_tickets
+          return history_tickets;
         } catch (error) {
           console.error("Fetch tickets history error:", error);
         }
@@ -252,7 +252,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const data = await response.json();
           setStore({ invoices: data });
-          return invoices
+          return invoices;
         } catch (error) {
           console.error("Fetch invoices error:", error);
         }
@@ -279,7 +279,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error(`Failed to create customer: ${errorData.message}`);
           }
           const newCustomer = await response.json();
-          setStore((state) => ({ customers: [...state.customers, newCustomer] }));
+          setStore((state) => ({
+            customers: [...state.customers, newCustomer],
+          }));
           actions.fetchCustomers();
           return newCustomer;
         } catch (error) {
@@ -347,6 +349,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       createBranch: async (branchData) => {
+        console.log("createBranch input:", branchData);
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/new_branch`,
@@ -382,7 +385,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({userData}),
+              body: JSON.stringify({ userData }),
             }
           );
           if (!response.ok) {
@@ -408,7 +411,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ticketData}),
+              body: JSON.stringify({ ticketData }),
             }
           );
           if (!response.ok) {
@@ -434,7 +437,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ticketHistoryData}),
+              body: JSON.stringify({ ticketHistoryData }),
             }
           );
           if (!response.ok) {
@@ -464,7 +467,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({invoiceData}),
+              body: JSON.stringify({ invoiceData }),
             }
           );
           if (!response.ok) {
@@ -586,7 +589,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({branchData}),
+              body: JSON.stringify({ branchData }),
             }
           );
           if (!response.ok) {
@@ -616,7 +619,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({userData}),
+              body: JSON.stringify({ userData }),
             }
           );
           if (!response.ok) {
@@ -646,7 +649,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ticketData}),
+              body: JSON.stringify({ ticketData }),
             }
           );
           if (!response.ok) {
@@ -676,7 +679,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ticketHistoryData}),
+              body: JSON.stringify({ ticketHistoryData }),
             }
           );
           if (!response.ok) {
@@ -708,7 +711,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({invoiceData}),
+              body: JSON.stringify({ invoiceData }),
             }
           );
           if (!response.ok) {
