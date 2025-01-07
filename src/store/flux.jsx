@@ -580,6 +580,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
       updateBranch: async (id, branchData) => {
+        console.log("Updating branch with data:", branchData);
         try {
           const response = await fetch(
             `${import.meta.env.VITE_API_URL}/branches/${id}`,
@@ -589,7 +590,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ branchData }),
+              body: JSON.stringify( branchData ),
             }
           );
           if (!response.ok) {

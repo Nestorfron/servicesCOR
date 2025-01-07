@@ -18,9 +18,9 @@ export const EditEngineer = ({engineer}) => {
 
   return (
     <>
-      <Button
+       <Button
         onPress={openModal}
-        className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white"
+        variant="bordered" size="sm"
       >
         <Edit className="mr-2 h-4 w-4" /> 
       </Button>
