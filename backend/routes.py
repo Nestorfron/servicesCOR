@@ -213,10 +213,36 @@ def new_branch():
     customer_id = body.get('customer_id', None)
     name = body.get('name', None)
     address = body.get('address', None)
+    Social_Registration = body.get('Social_Registration', None)
+    colony = body.get('colony', None)
+    postal_code = body.get('postal_code', None)
+    city = body.get('city', None)
+    municipality = body.get('municipality', None)
+    state = body.get('state', None)
+    contact_1 = body.get('contact_1', None)
+    phone_1 = body.get('phone_1', None)
+    contact_2 = body.get('contact_2', None)
+    phone_2 = body.get('phone_2', None)
+    email = body.get('email', None)
+    schredule = body.get('schredule', None)
     if customer_id is None or name is None or address is None:
         return jsonify({'message': 'Missing parameters'}), 400
     try:   
-        new_branch = Branch(customer_id=customer_id, name=name, address=address)
+        new_branch = Branch(customer_id=customer_id,
+            name=name,
+            address=address,
+            Social_Registration=Social_Registration,
+            colony=colony,
+            postal_code=postal_code,
+            city=city,
+            municipality=municipality,
+            state=state,
+            contact_1=contact_1,
+            phone_1=phone_1,
+            contact_2=contact_2,
+            phone_2=phone_2,
+            email=email,
+            schredule=schredule)
         db.session.add(new_branch)
         db.session.commit()
         return jsonify({"new_branch": new_branch.serialize()}), 201
