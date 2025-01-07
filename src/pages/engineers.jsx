@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, User, Phone, Mail, Edit, Building } from 'lucide-react';
+import { Plus, Search, Filter, User, Phone, Mail, Edit, Building, Trash2 } from 'lucide-react';
 import {
   Button,
   Card,
@@ -17,6 +17,11 @@ import { EditEngineer } from "../components/edit/editEngineers";
 export const Engineers = () => {
   const { store, actions } = useContext(Context);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const handleDelete = async (engineerId) => {
+    await actions.deleteEngineer(engineerId);
+    actions.fetchEngineers();
+  }
 
   useEffect(() => {
     actions.fetchEngineers();
@@ -105,6 +110,9 @@ export const Engineers = () => {
                     </div>
                     <div className="mt-6 flex justify-end space-x-2">
                       <EditEngineer engineer={engineer} />
+                      <Button color="danger" size="sm" onPress={() => handleDelete(engineer.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </CardBody>
                 </Card>

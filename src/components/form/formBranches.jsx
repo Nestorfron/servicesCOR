@@ -5,27 +5,26 @@ import { Context } from "../../store/appContext";
 import { Button, Input } from "@nextui-org/react";
 
 export const FormBranch = ({ id, btnBranch, branch: initialBranch, onClose }) => {
-    const { actions } = useContext(Context);
-    const [customers, setCustomers] = useState([]);
-    const [selectedCustomer, setSelectedCustomer] = useState("");
-    const [branch, setBranch] = useState({
-      customer_id: "",
-      name: "",
-      Social_Registration: "",
-      address: "",
-      colony: "",
-      postal_code: "",
-      city: "",
-      municipality: "",
-      state: "",
-      contact_1: "",
-      phone_1: "",
-      contact_2: "",
-      phone_2: "",
-      email: "",
-      schredule: "",
-    });
-  
+  const { actions } = useContext(Context);
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState("");
+  const [branch, setBranch] = useState({
+    customer_id: "",
+    name: "",
+    Social_Registration: "",
+    address: "",
+    colony: "",
+    postal_code: "",
+    city: "",
+    municipality: "",
+    state: "",
+    contact_1: "",
+    phone_1: "",
+    contact_2: "",
+    phone_2: "",
+    email: "",
+    schredule: "",
+  });
 
   // Form submission handler
   const handleSubmit = (e) => {
@@ -42,7 +41,6 @@ export const FormBranch = ({ id, btnBranch, branch: initialBranch, onClose }) =>
       });
     }
   };
-
 
   useEffect(() => {
     actions.fetchCustomers().then((data) => setCustomers(data || []));
@@ -68,17 +66,18 @@ export const FormBranch = ({ id, btnBranch, branch: initialBranch, onClose }) =>
     }
   }, [initialBranch]);
 
-
-    return (
-        <form className="flex flex-col gap-2 my-4" onSubmit={handleSubmit}>
-          {/* Dropdown for Customers */}
+  return (
+    <form className="flex flex-col gap-4 my-4" onSubmit={handleSubmit}>
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-1 flex flex-col gap-2">
+          {/* Left Column */}
           <select
             value={selectedCustomer}
             onChange={(e) => {
               setSelectedCustomer(e.target.value);
               setBranch({ ...branch, customer_id: e.target.value });
             }}
-            className="mt-2"
+            className="mt-2 p-2 border rounded"
           >
             <option value="" disabled>
               Seleccione un Cliente
@@ -89,8 +88,6 @@ export const FormBranch = ({ id, btnBranch, branch: initialBranch, onClose }) =>
               </option>
             ))}
           </select>
-    
-          {/* Input Fields */}
           <Input
             label="Nombre"
             value={branch.name}
@@ -126,6 +123,9 @@ export const FormBranch = ({ id, btnBranch, branch: initialBranch, onClose }) =>
             value={branch.municipality}
             onChange={(e) => setBranch({ ...branch, municipality: e.target.value })}
           />
+        </div>
+        <div className="flex-1 flex flex-col gap-2">
+          {/* Right Column */}
           <Input
             label="Estado"
             value={branch.state}
@@ -161,11 +161,13 @@ export const FormBranch = ({ id, btnBranch, branch: initialBranch, onClose }) =>
             value={branch.schredule}
             onChange={(e) => setBranch({ ...branch, schredule: e.target.value })}
           />
-    
-          {/* Submit Button */}
-          <Button type="submit" color="primary" className="mt-4">
-            {btnBranch}
-          </Button>
-        </form>
-      );
-    };
+        </div>
+      </div>
+      {/* Submit Button */}
+      <Button type="submit" color="primary" className="mt-4">
+        {btnBranch}
+      </Button>
+    </form>
+  );
+};
+
