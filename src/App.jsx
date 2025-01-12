@@ -14,7 +14,7 @@ import { Providers } from "./pages/providers.jsx";
 import { Engineers } from "./pages/engineers.jsx";
 import { Invoices } from "./pages/invoices.jsx";
 
-import { TechAbstractShapes } from "./components/TechAbstractShapes.jsx";
+import { TechAbstractShapes } from "./components/background/techAbstractShapes.jsx";
 
 function App({ Component, pageProps }) {
   return (

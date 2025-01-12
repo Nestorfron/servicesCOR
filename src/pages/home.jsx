@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import Logo from "../assets/logoBlanco.svg";
-import { ParticlesBackground } from "../components/particles.jsx";
+import { ParticlesBackground } from "../components/background/particles.jsx";
 
 function Home() {
   const {store, actions } = useContext(Context);
