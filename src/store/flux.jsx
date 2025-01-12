@@ -411,7 +411,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
-              body: JSON.stringify({ ticketData }),
+              body: JSON.stringify(ticketData),
             }
           );
           if (!response.ok) {
